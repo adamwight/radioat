@@ -2,25 +2,66 @@
 
 import datetime
 import sys
+import threading
 
 import archive_file
 import radio_program
 import radio_source
 import radio_station
+import ui
 
 class RecordJob(object):
-	def __init__(self, program, duration):
-		output = archive_file.ArchiveFile(program)
-		radio_source.RadioSource(program.station).record_to(output, duration)
+
+    def __init__(self, program, duration):
+        self.start_time = datetime.datetime.utcnow()
+        self.end_time = self.start_time + duration
+        self.duration = duration
+        self.bytes_written = 0
+
+        reader = radio_source.RadioSource(program.station).record(duration)
+        new_archive = archive_file.ArchiveFile(program)
+
+        if sys.stdout.isatty():
+            self.watchdog()
+
+        with new_archive.sink as writer:
+            for chunk in reader:
+                writer.write(chunk)
+
+                self.bytes_written += len(chunk)
+
+    def watchdog(self):
+        ui.get().progress(self)
+
+        # FIXME: thread-dangerous
+        thread = threading.Timer(1.0, self.watchdog)
+        thread.daemon = True
+        thread.start()
+
+
+def doMain(stdscr=None):
+    if stdscr:
+        console.stdscr = stdscr
+
+    # TODO: usage
+    url = sys.argv[1]
+    title = sys.argv[2]
+    hours = float(sys.argv[3])
+    seconds = 3600 * hours
+    duration = datetime.timedelta(seconds=seconds)
+
+    station = radio_station.RadioStation(url)
+    program = radio_program.RadioProgram(station=station, title=title)
+    RecordJob(program, duration)
+
 
 if __name__ == "__main__":
-	# TODO: usage
-	url = sys.argv[1]
-	title = sys.argv[2]
-	hours = float(sys.argv[3])
-	seconds = 3600 * hours
-	duration = datetime.timedelta(seconds=seconds)
+    if sys.stdout.isatty():
+        import console
+        ui.set(console.Console())
+    else:
+        import daemon
+        ui.set(daemon.Daemon())
 
-	station = radio_station.RadioStation(url)
-	program = radio_program.RadioProgram(station=station, title=title)
-	RecordJob(program, duration)
+    ui.get().main = doMain
+    ui.get().run()
