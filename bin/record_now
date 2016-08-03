@@ -30,6 +30,8 @@ class RecordJob(object):
 
                 self.bytes_written += len(chunk)
 
+        ui.get().log("Completed successfully, wrote {bytes}".format(bytes=ui.sizeof_fmt(self.bytes_written)))
+
     def watchdog(self):
         ui.get().progress(self)
 

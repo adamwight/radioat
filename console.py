@@ -26,9 +26,15 @@ class Console(object):
 
         percent_complete = (now - job.start_time).total_seconds() / job.duration.total_seconds()
         remaining = job.end_time - now
+        # Floor
         remaining -= datetime.timedelta(microseconds=remaining.microseconds)
 
-        stdscr.addstr(progress_pos[1], progress_pos[0], "{now}, {bytes} bytes written ({complete:.1f}%, {remaining} remaining)".format(now=now.isoformat(' '), bytes=sizeof_fmt(job.bytes_written), complete=percent_complete, remaining=remaining))
+        stdscr.addstr(
+            progress_pos[1], progress_pos[0],
+            "{now}, {bytes} bytes written ({complete:.1f}%, {remaining} remaining)".format(
+                now=now.isoformat(' '),
+                bytes=ui.sizeof_fmt(job.bytes_written),
+                complete=percent_complete, remaining=remaining))
         stdscr.refresh()
 
     def log(self, txt):
@@ -37,11 +43,3 @@ class Console(object):
         log_pos[1] += 1
         stdscr.refresh()
 
-
-def sizeof_fmt(num, suffix='B'):
-    '''http://stackoverflow.com/a/1094933'''
-    for unit in ['','Ki','Mi','Gi','Ti','Pi','Ei','Zi']:
-        if abs(num) < 1024.0:
-            return "%3.1f%s%s" % (num, unit, suffix)
-        num /= 1024.0
-    return "%.1f%s%s" % (num, 'Yi', suffix)
