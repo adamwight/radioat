@@ -6,6 +6,8 @@ import curses
 import datetime
 import sys
 
+import ui
+
 stdscr = None
 
 log_pos = [12, 5]
