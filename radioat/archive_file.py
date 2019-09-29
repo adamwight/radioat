@@ -1,5 +1,6 @@
 import datetime
 import os
+import os.path
 
 import radioat.ui
 
@@ -29,8 +30,9 @@ class ArchiveFile(object):
         )
         radioat.ui.get().log("Creating " + self.path)
 
+        os.makedirs(os.path.dirname(self.path), exist_ok=True)
         # TODO: append
-        self.sink = open(self.path, "w")
+        self.sink = open(self.path, "wb")
 
     def __del__(self):
         if self.sink:

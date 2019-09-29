@@ -19,12 +19,13 @@ setup(
     url="https://github.com/adamwight/radioat",
     entry_points={
         "console_scripts": [
-            "record_now = bin.record_now:main",
-            "schedule = bin.schedule:main",
+            "record_now = radioat.record_now:main",
+            "schedule = radioat.schedule:main",
         ],
     },
     install_requires=[
-        "python-crontab>=2.1.1",
-        "requests>=2.6.2"
+        "docopt",
+        "python-crontab",
+        "requests"
     ]
 )

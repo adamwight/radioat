@@ -20,6 +20,7 @@ class RadioSource(object):
         radioat.ui.get().log("Recording from {now} until {end_time}".format(
             now=start_time, end_time=end_time))
 
+        # TODO: context manager, raise_for_status
         response = requests.get(self.station.url, stream=True, timeout=10).raw
 
         # TODO: reconnect and resume if necessary.  write about it in a log and
