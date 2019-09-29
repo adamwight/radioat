@@ -8,4 +8,4 @@ class Daemon(object):
         pass
 
     def log(self, txt):
-        print txt
+        print(txt)

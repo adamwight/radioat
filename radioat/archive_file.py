@@ -1,7 +1,8 @@
 import datetime
 import os
 
-import ui
+import radioat.ui
+
 
 # TODO:
 # - song metadata and optionally allow stream ripper to cut
@@ -26,7 +27,7 @@ class ArchiveFile(object):
             timestamp=datetime.date.today().isoformat(),
             title=program.title
         )
-        ui.get().log("Creating " + self.path)
+        radioat.ui.get().log("Creating " + self.path)
 
         # TODO: append
         self.sink = open(self.path, "w")

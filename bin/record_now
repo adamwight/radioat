@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import datetime
 import sys
@@ -9,6 +9,7 @@ import radio_program
 import radio_source
 import radio_station
 import ui
+
 
 class RecordJob(object):
 
@@ -57,7 +58,7 @@ def doMain(stdscr=None):
     RecordJob(program, duration)
 
 
-if __name__ == "__main__":
+def main():
     if sys.stdout.isatty():
         import console
         ui.set(console.Console())
@@ -67,3 +68,7 @@ if __name__ == "__main__":
 
     ui.get().main = doMain
     ui.get().run()
+
+
+if __name__ == "__main__":
+    main()

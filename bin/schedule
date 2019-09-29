@@ -1,4 +1,4 @@
-#!/usr/bin/env
+#!/usr/bin/env python3
 
 import datetime
 import sys
@@ -8,7 +8,8 @@ import radio_station
 import schedule_source
 import times
 
-if __name__ == "__main__":
+
+def main():
     # TODO: usage
     url = sys.argv[1]
     title = sys.argv[2]
@@ -23,3 +24,7 @@ if __name__ == "__main__":
     times = times.Times(cron, duration)
     program = radio_program.RadioProgram(station=station, title=title, times=times)
     schedule_source.Schedule.add_recurring(program)
+
+
+if __name__ == "__main__":
+    main()
