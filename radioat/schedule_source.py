@@ -27,6 +27,8 @@ class Schedule(object):
             duration=program.times.duration)
         job = cron.new(command=cmd)
         job.setall(program.times.crontab)
+        print("Writing new crontab:\n" + cron.render()
+              + "# " + job.description())
         cron.write()
 
     # def add_exception(program, times):

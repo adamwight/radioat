@@ -34,7 +34,8 @@ class RecordJob(object):
         self.duration = duration
         self.bytes_written = 0
 
-        reader = radioat.radio_source.RadioSource(program.station).record(duration)
+        reader = radioat.radio_source.RadioSource(program.station)\
+            .record(duration)
         new_archive = radioat.archive_file.ArchiveFile(program)
 
         if sys.stdout.isatty():
@@ -46,7 +47,9 @@ class RecordJob(object):
 
                 self.bytes_written += len(chunk)
 
-        radioat.ui.get().log("Completed successfully, wrote {bytes}".format(bytes=radioat.ui.sizeof_fmt(self.bytes_written)))
+        radioat.ui.get().log(
+            "Completed successfully, wrote {bytes}".format(
+                bytes=radioat.ui.sizeof_fmt(self.bytes_written)))
 
     def watchdog(self):
         radioat.ui.get().progress(self)
@@ -62,7 +65,6 @@ def doMain(url, title, hours, stdscr=None):
     if stdscr:
         radioat.console.stdscr = stdscr
 
-    args = docopt.docopt(__doc__)
     seconds = 3600 * hours
     duration = datetime.timedelta(seconds=seconds)
 
@@ -82,7 +84,8 @@ def main():
         radioat.ui.set(radioat.daemon.Daemon())
 
     radioat.ui.get().main = \
-        lambda stdscr: doMain(args["<url>"], args["<title>"], float(args["<hours>"]), stdscr)
+        lambda stdscr: doMain(
+            args["<url>"], args["<title>"], float(args["<hours>"]), stdscr)
     radioat.ui.get().run()
 
 

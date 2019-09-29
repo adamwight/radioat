@@ -24,6 +24,7 @@ setup(
         ],
     },
     install_requires=[
+        "cron_descriptor",
         "docopt",
         "python-crontab",
         "requests"

@@ -1,5 +1,16 @@
-import datetime
-import sys
+"""Add radio show to cronjob
+
+Usage:
+  schedule <url> <title> <cron> <hours>
+
+Arguments:
+  <url>     Streaming audio source
+  <title>   Show title, output files will be uniquely named according to start
+            time.
+  <cron>    Cron specifier, e.g. "0 14 * * *"
+  <hours>   Duration, in hours.
+"""
+import docopt
 
 import radioat.radio_program
 import radioat.radio_station
@@ -8,19 +19,16 @@ import radioat.times
 
 
 def main():
-    # TODO: usage
-    url = sys.argv[1]
-    title = sys.argv[2]
-    cron = sys.argv[3]
-    # FIXME: double-converting is crazy
-    #hours = float(sys.argv[4])
-    #seconds = 3600 * hours
-    #duration = datetime.timedelta(seconds=seconds)
-    duration = float(sys.argv[4])
+    args = docopt.docopt(__doc__)
+    url = args["<url>"]
+    title = args["<title>"]
+    cron = args["<cron>"]
+    duration = float(args["<hours>"])
 
     station = radioat.radio_station.RadioStation(url)
     times = radioat.times.Times(cron, duration)
-    program = radioat.radio_program.RadioProgram(station=station, title=title, times=times)
+    program = radioat.radio_program.RadioProgram(
+        station=station, title=title, times=times)
     radioat.schedule_source.Schedule.add_recurring(program)
 
 
