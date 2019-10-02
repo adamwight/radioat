@@ -31,8 +31,7 @@ class ArchiveFile(object):
         radioat.ui.get().log("Creating " + self.path)
 
         os.makedirs(os.path.dirname(self.path), exist_ok=True)
-        # TODO: append
-        self.sink = open(self.path, "wb")
+        self.sink = open(self.path, "ab")
 
     def __del__(self):
         if self.sink:
