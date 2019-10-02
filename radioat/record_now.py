@@ -19,10 +19,10 @@ import docopt
 import sys
 import threading
 
-import radioat.archive_file
-import radioat.radio_program
-import radioat.radio_source
-import radioat.radio_station
+from radioat.archive_file import ArchiveFile
+from radioat.radio_source import RadioSource
+from radioat.radio_program import RadioProgram
+from radioat.radio_station import RadioStation
 import radioat.ui
 
 
@@ -34,9 +34,8 @@ class RecordJob(object):
         self.duration = duration
         self.bytes_written = 0
 
-        reader = radioat.radio_source.RadioSource(program.station)\
-            .record(duration)
-        new_archive = radioat.archive_file.ArchiveFile(program)
+        reader = RadioSource(program.station).record(duration)
+        new_archive = ArchiveFile(program)
 
         if sys.stdout.isatty():
             self.watchdog()
@@ -68,8 +67,8 @@ def doMain(url, title, hours, stdscr=None):
     seconds = 3600 * hours
     duration = datetime.timedelta(seconds=seconds)
 
-    station = radioat.radio_station.RadioStation(url)
-    program = radioat.radio_program.RadioProgram(station=station, title=title)
+    station = RadioStation(url)
+    program = RadioProgram(station=station, title=title)
     RecordJob(program, duration)
 
 

@@ -12,10 +12,10 @@ Arguments:
 """
 import docopt
 
-import radioat.radio_program
-import radioat.radio_station
-import radioat.schedule_source
-import radioat.times
+from radioat.radio_program import RadioProgram
+from radioat.radio_station import RadioStation
+from radioat.schedule_source import Schedule
+from radioat.times import Times
 
 
 def main():
@@ -25,11 +25,11 @@ def main():
     cron = args["<cron>"]
     duration = float(args["<hours>"])
 
-    station = radioat.radio_station.RadioStation(url)
-    times = radioat.times.Times(cron, duration)
-    program = radioat.radio_program.RadioProgram(
-        station=station, title=title, times=times)
-    radioat.schedule_source.Schedule.add_recurring(program)
+    Schedule.add_recurring(
+        RadioProgram(
+            station=RadioStation(url),
+            title=title,
+            times=Times(cron, duration)))
 
 
 if __name__ == "__main__":
