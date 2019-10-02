@@ -27,6 +27,6 @@ class RadioSource(object):
         # metadata TODO: use automatic chunk size rather than the default?
         #   for chunk in response.iter_content(chunk_size=None):
         for chunk in response:
+            yield chunk
             if datetime.datetime.utcnow() > end_time:
                 return
-            yield chunk
